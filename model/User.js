@@ -5,6 +5,6 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true}
 }, { collection: 'users'});
 
-const modal = mongoose.Model('UserSchema', UserSchema);
+const model = mongoose.model('UserSchema', UserSchema);
 
 module.exports = model;
