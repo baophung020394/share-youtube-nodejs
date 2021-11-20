@@ -5,8 +5,8 @@ const PORT = 8000;
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const User = require('./model/User');
-const Youtube = require('./model/Youtube');
+const User = require('../model/User.js');
+const Youtube = require('../model/Youtube.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -17,11 +17,11 @@ app.use(cors());
 
 mongoose.connect("mongodb+srv://baophung:Bao123456@shareyoutube.tbcdk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {useNewUrlParser: true, useNewUrlParser: true,  useUnifiedTopology: true})
 
-app.use('/', express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+app.use('/', express.static(path.join(__dirname, '/static/')));
 /**
  * Login
  */
@@ -154,6 +154,6 @@ app.get('/api/share/list', async (req, res) => {
     throw error;
   }
 });
-app.listen(PORT, () => {
+app.listen(8000, () => {
   console.log(`Server up at ${PORT}`);
 })
