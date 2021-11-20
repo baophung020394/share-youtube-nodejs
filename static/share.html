@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>Share youtube</h1>
+		<form id="reg-form">
+			<input type="text" autocomplete="off" id="source" placeholder="source" />
+			<input type="submit" value="Submit Form" />
+		</form>
+
+		<script>
+			const form = document.getElementById('reg-form')
+			form.addEventListener('submit', sourceSource)
+
+			async function sourceSource(event) {
+				event.preventDefault()
+				const source = document.getElementById('source').value
+        console.log(source)
+				const result = await fetch('/api/share', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						source
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+					// everythign went fine
+					alert('Success')
+				} else {
+					alert(result.error)
+				}
+			}
+		</script>
+	</body>
+</html>
