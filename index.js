@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require('path');
 const PORT = 8000;
-const app = express();
+
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const User = require('./model/User');
@@ -11,10 +12,14 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'asdasdasdadasf23@#@#@#@!#!#@DASD';
 
+const app = express();
+app.use(cors());
+
 mongoose.connect("mongodb+srv://baophung:Bao123456@shareyoutube.tbcdk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {useNewUrlParser: true, useNewUrlParser: true,  useUnifiedTopology: true})
 
 app.use('/', express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 /**
@@ -25,8 +30,10 @@ app.post('/api/login', async (req, res) => {
     username, password
   } = req.body;
   const user = await User.findOne({ username }).lean();
-
+  
   if(!user) {
+    console.log('username', username)
+    console.log('password', password)
     return res.json({
       status: 'error', error: 'Invalid username/password'
     });
@@ -39,7 +46,7 @@ app.post('/api/login', async (req, res) => {
       username: user.username
     }, JWT_SECRET);
     return res.json({
-      status: 'ok', data: token
+      status: 'ok', token: token, name: user.username
     });
   }
 
@@ -140,6 +147,10 @@ app.get('/api/share/list', async (req, res) => {
     // console.log('Share success', response)
   } catch(error) {
     console.log(JSON.stringify(error));
+    if(error.code === 11000) {
+      //duplicate key
+      return res.json({ status: 'error', error: 'Source duplicate'});
+    }
     throw error;
   }
 });
